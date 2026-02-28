@@ -1,0 +1,27 @@
+using System.Text.Json.Serialization;
+
+namespace EvilBeaver.DAP.Dto.Types;
+
+public class GotoTarget
+{
+    [JsonPropertyName("id")]
+    public int Id { get; set; }
+
+    [JsonPropertyName("label")]
+    public string Label { get; set; } = default!;
+
+    [JsonPropertyName("line")]
+    public int Line { get; set; }
+
+    [JsonPropertyName("column")]
+    public int? Column { get; set; }
+
+    [JsonPropertyName("endLine")]
+    public int? EndLine { get; set; }
+
+    [JsonPropertyName("endColumn")]
+    public int? EndColumn { get; set; }
+
+    [JsonPropertyName("instructionPointerReference")]
+    public string? InstructionPointerReference { get; set; }
+}

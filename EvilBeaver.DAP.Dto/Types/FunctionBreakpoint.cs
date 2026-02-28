@@ -1,0 +1,15 @@
+using System.Text.Json.Serialization;
+
+namespace EvilBeaver.DAP.Dto.Types;
+
+public class FunctionBreakpoint
+{
+    [JsonPropertyName("name")]
+    public string Name { get; set; } = default!;
+
+    [JsonPropertyName("condition")]
+    public string? Condition { get; set; }
+
+    [JsonPropertyName("hitCondition")]
+    public string? HitCondition { get; set; }
+}

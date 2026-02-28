@@ -1,0 +1,27 @@
+using System.Text.Json.Serialization;
+
+namespace EvilBeaver.DAP.Dto.Types;
+
+public class StackFrameFormat : ValueFormat
+{
+    [JsonPropertyName("parameters")]
+    public bool? Parameters { get; set; }
+
+    [JsonPropertyName("parameterTypes")]
+    public bool? ParameterTypes { get; set; }
+
+    [JsonPropertyName("parameterNames")]
+    public bool? ParameterNames { get; set; }
+
+    [JsonPropertyName("parameterValues")]
+    public bool? ParameterValues { get; set; }
+
+    [JsonPropertyName("line")]
+    public bool? Line { get; set; }
+
+    [JsonPropertyName("module")]
+    public bool? Module { get; set; }
+
+    [JsonPropertyName("includeAll")]
+    public bool? IncludeAll { get; set; }
+}

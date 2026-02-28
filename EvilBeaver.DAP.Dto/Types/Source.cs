@@ -1,0 +1,40 @@
+using System.Text.Json.Serialization;
+
+namespace EvilBeaver.DAP.Dto.Types;
+
+/// <summary>
+/// A descriptor for source code.
+/// </summary>
+public class Source
+{
+    [JsonPropertyName("name")]
+    public string? Name { get; set; }
+
+    [JsonPropertyName("path")]
+    public string? Path { get; set; }
+
+    [JsonPropertyName("sourceReference")]
+    public int? SourceReference { get; set; }
+
+    [JsonPropertyName("presentationHint")]
+    public string? PresentationHint { get; set; }
+
+    [JsonPropertyName("origin")]
+    public string? Origin { get; set; }
+
+    [JsonPropertyName("sources")]
+    public Source[]? Sources { get; set; }
+
+    [JsonPropertyName("adapterData")]
+    public object? AdapterData { get; set; }
+
+    [JsonPropertyName("checksums")]
+    public Checksum[]? Checksums { get; set; }
+}
+
+public static class SourcePresentationHint
+{
+    public const string Normal = "normal";
+    public const string Emphasize = "emphasize";
+    public const string Deemphasize = "deemphasize";
+}
