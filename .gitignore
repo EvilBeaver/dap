@@ -1,0 +1,48 @@
+## [Visual Studio]
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# User-specific files (MonoDevelop/Xamarin Studio)
+*.userprefs
+
+# Mono auto generated files
+mono_crash.*
+
+# [Build results]
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Tt]est[Rr]esult*/
+[Dd]eploy/
+
+# [NuGet]
+# NuGet Packages
+*.nupkg
+# The packages folder can be ignored because of PackageReference usage
+**/[Pp]ackages/*
+# except build/, which is used as an MSBuild target.
+!**/[Pp]ackages/build/
+# Uncomment if using NuGet 2.x to load packages into the solution
+# !**/[Pp]ackages/repositories.config
+# NuGet Symbol Packages
+*.snupkg
+# Used for restore with NuGet 3.x
+project.lock.json
+project.assets.json
+
+# [Common Editor Files]
+.idea/
+.vscode/
+*.swp
+*~
+*.bak
+*.tmp
+*.log
+
+# [OS generated files]
+.DS_Store
+Thumbs.db
