@@ -12,10 +12,11 @@ using System.Reflection;
 
 [assembly: System.Reflection.AssemblyCompanyAttribute("Ovsiankin Andrei aka EvilBeaver")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
+[assembly: System.Reflection.AssemblyCopyrightAttribute("Copyright (c) Ovsiankin Andrei")]
 [assembly: System.Reflection.AssemblyDescriptionAttribute("Data Transfer Objects and serialization logic for Debug Adapter Protocol (DAP) in" +
     " .NET.")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("0.1.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("0.1.0+2b6f86fea4a64359e366493cb31b3220d2ab2b3b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("0.1.0+3ff3f6df133818ac391196d372f433701baeb674")]
 [assembly: System.Reflection.AssemblyProductAttribute("EvilBeaver.DAP.Dto")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EvilBeaver.DAP.Dto")]
 [assembly: System.Reflection.AssemblyVersionAttribute("0.1.0.0")]

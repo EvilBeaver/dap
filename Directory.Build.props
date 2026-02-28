@@ -1,0 +1,10 @@
+<Project>
+  <PropertyGroup>
+    <Version>0.1.0-alpha.1</Version>
+    <Authors>Ovsiankin Andrei aka EvilBeaver</Authors>
+    <PackageLicenseExpression>MPL-2.0</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/EvilBeaver/dap</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Copyright>Copyright (c) Ovsiankin Andrei</Copyright>
+  </PropertyGroup>
+</Project>

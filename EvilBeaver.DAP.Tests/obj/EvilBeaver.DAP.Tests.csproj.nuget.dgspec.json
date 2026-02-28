@@ -115,7 +115,7 @@
       }
     },
     "/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP.Tests/EvilBeaver.DAP.Tests.csproj": {
-      "version": "1.0.0",
+      "version": "0.1.0",
       "restore": {
         "projectUniqueName": "/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP.Tests/EvilBeaver.DAP.Tests.csproj",
         "projectName": "EvilBeaver.DAP.Tests",

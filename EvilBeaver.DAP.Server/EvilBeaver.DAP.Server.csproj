@@ -3,10 +3,6 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>0.1.0</Version>
-    <Authors>Ovsiankin Andrei aka EvilBeaver</Authors>
-    <PackageLicenseExpression>MPL-2.0</PackageLicenseExpression>
-    <RepositoryUrl>https://github.com/EvilBeaver/dap</RepositoryUrl>
     <Description>A lightweight, extensible Debug Adapter Protocol (DAP) server implementation for .NET.</Description>
   </PropertyGroup>
 

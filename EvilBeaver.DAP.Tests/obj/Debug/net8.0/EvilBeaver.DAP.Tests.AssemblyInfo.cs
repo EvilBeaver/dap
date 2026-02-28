@@ -10,13 +10,15 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("EvilBeaver.DAP.Tests")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("Ovsiankin Andrei aka EvilBeaver")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
-[assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2b6f86fea4a64359e366493cb31b3220d2ab2b3b")]
+[assembly: System.Reflection.AssemblyCopyrightAttribute("Copyright (c) Ovsiankin Andrei")]
+[assembly: System.Reflection.AssemblyFileVersionAttribute("0.1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("0.1.0+3ff3f6df133818ac391196d372f433701baeb674")]
 [assembly: System.Reflection.AssemblyProductAttribute("EvilBeaver.DAP.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EvilBeaver.DAP.Tests")]
-[assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
+[assembly: System.Reflection.AssemblyVersionAttribute("0.1.0.0")]
+[assembly: System.Reflection.AssemblyMetadataAttribute("RepositoryUrl", "https://github.com/EvilBeaver/dap")]
 
 // Создано классом WriteCodeFragment MSBuild.
 
