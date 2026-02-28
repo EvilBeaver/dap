@@ -4,7 +4,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Description>A lightweight, extensible Debug Adapter Protocol (DAP) server implementation for .NET.</Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\"/>
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\EvilBeaver.DAP.Dto\EvilBeaver.DAP.Dto.csproj" />
