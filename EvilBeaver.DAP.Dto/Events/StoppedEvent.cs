@@ -5,7 +5,7 @@ namespace EvilBeaver.DAP.Dto.Events;
 
 public class StoppedEvent : Event<StoppedEventBody>
 {
-    public override string EventType => "stopped";
+    public StoppedEvent() => EventType = "stopped";
 }
 
 public class StoppedEventBody

@@ -5,7 +5,7 @@ namespace EvilBeaver.DAP.Dto.Events;
 
 public class ProgressUpdateEvent : Event<ProgressUpdateEventBody>
 {
-    public override string EventType => "progressUpdate";
+    public ProgressUpdateEvent() => EventType = "progressUpdate";
 }
 
 public class ProgressUpdateEventBody

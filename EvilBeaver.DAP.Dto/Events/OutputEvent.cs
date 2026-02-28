@@ -6,7 +6,7 @@ namespace EvilBeaver.DAP.Dto.Events;
 
 public class OutputEvent : Event<OutputEventBody>
 {
-    public override string EventType => "output";
+    public OutputEvent() => EventType = "output";
 }
 
 public class OutputEventBody

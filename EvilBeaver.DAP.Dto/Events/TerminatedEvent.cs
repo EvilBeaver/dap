@@ -5,7 +5,7 @@ namespace EvilBeaver.DAP.Dto.Events;
 
 public class TerminatedEvent : Event<TerminatedEventBody>
 {
-    public override string EventType => "terminated";
+    public TerminatedEvent() => EventType = "terminated";
 }
 
 public class TerminatedEventBody

@@ -1,0 +1,11 @@
+/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP.Dto/obj/Debug/net8.0/EvilBeaver.DAP.Dto.GeneratedMSBuildEditorConfig.editorconfig
+/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP.Dto/obj/Debug/net8.0/EvilBeaver.DAP.Dto.AssemblyInfoInputs.cache
+/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP.Dto/obj/Debug/net8.0/EvilBeaver.DAP.Dto.AssemblyInfo.cs
+/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP.Dto/obj/Debug/net8.0/EvilBeaver.DAP.Dto.csproj.CoreCompileInputs.cache
+/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP.Dto/bin/Debug/net8.0/EvilBeaver.DAP.Dto.deps.json
+/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP.Dto/bin/Debug/net8.0/EvilBeaver.DAP.Dto.dll
+/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP.Dto/bin/Debug/net8.0/EvilBeaver.DAP.Dto.pdb
+/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP.Dto/obj/Debug/net8.0/EvilBeaver.DAP.Dto.dll
+/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP.Dto/obj/Debug/net8.0/refint/EvilBeaver.DAP.Dto.dll
+/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP.Dto/obj/Debug/net8.0/EvilBeaver.DAP.Dto.pdb
+/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP.Dto/obj/Debug/net8.0/ref/EvilBeaver.DAP.Dto.dll

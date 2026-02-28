@@ -6,7 +6,7 @@ namespace EvilBeaver.DAP.Dto.Events;
 
 public class LoadedSourceEvent : Event<LoadedSourceEventBody>
 {
-    public override string EventType => "loadedSource";
+    public LoadedSourceEvent() => EventType = "loadedSource";
 }
 
 public class LoadedSourceEventBody

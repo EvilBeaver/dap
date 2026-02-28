@@ -5,7 +5,7 @@ namespace EvilBeaver.DAP.Dto.Events;
 
 public class ExitedEvent : Event<ExitedEventBody>
 {
-    public override string EventType => "exited";
+    public ExitedEvent() => EventType = "exited";
 }
 
 public class ExitedEventBody

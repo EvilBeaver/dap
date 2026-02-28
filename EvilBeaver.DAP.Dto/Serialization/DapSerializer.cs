@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using EvilBeaver.DAP.Dto.Base;
 
 namespace EvilBeaver.DAP.Dto.Serialization;

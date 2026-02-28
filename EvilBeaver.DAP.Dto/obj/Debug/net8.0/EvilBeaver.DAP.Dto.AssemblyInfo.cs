@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EvilBeaver.DAP.Dto")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7c7a28775de161885ffedface143f0bd27f35347")]
 [assembly: System.Reflection.AssemblyProductAttribute("EvilBeaver.DAP.Dto")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EvilBeaver.DAP.Dto")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

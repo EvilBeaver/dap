@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP/EvilBeaver.DAP.Dto/EvilBeaver.DAP.Dto.csproj",
+      "projectUniqueName": "/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP.Dto/EvilBeaver.DAP.Dto.csproj",
       "projectName": "EvilBeaver.DAP.Dto",
-      "projectPath": "/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP/EvilBeaver.DAP.Dto/EvilBeaver.DAP.Dto.csproj",
+      "projectPath": "/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP.Dto/EvilBeaver.DAP.Dto.csproj",
       "packagesPath": "/home/andrei/.nuget/packages/",
-      "outputPath": "/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP/EvilBeaver.DAP.Dto/obj/",
+      "outputPath": "/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP.Dto/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/andrei/.nuget/NuGet/NuGet.Config"

@@ -16,5 +16,5 @@ public class ThreadsResponse : Response<ThreadsResponseBody>
 public class ThreadsResponseBody
 {
     [JsonPropertyName("threads")]
-    public Thread[] Threads { get; set; } = default!;
+    public EvilBeaver.DAP.Dto.Types.Thread[] Threads { get; set; } = default!;
 }

@@ -5,7 +5,7 @@ namespace EvilBeaver.DAP.Dto.Events;
 
 public class InvalidatedEvent : Event<InvalidatedEventBody>
 {
-    public override string EventType => "invalidated";
+    public InvalidatedEvent() => EventType = "invalidated";
 }
 
 public class InvalidatedEventBody

@@ -6,7 +6,7 @@ namespace EvilBeaver.DAP.Dto.Events;
 
 public class ModuleEvent : Event<ModuleEventBody>
 {
-    public override string EventType => "module";
+    public ModuleEvent() => EventType = "module";
 }
 
 public class ModuleEventBody

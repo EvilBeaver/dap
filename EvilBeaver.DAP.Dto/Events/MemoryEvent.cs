@@ -5,7 +5,7 @@ namespace EvilBeaver.DAP.Dto.Events;
 
 public class MemoryEvent : Event<MemoryEventBody>
 {
-    public override string EventType => "memory";
+    public MemoryEvent() => EventType = "memory";
 }
 
 public class MemoryEventBody

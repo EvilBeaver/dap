@@ -6,7 +6,7 @@ namespace EvilBeaver.DAP.Dto.Events;
 
 public class BreakpointEvent : Event<BreakpointEventBody>
 {
-    public override string EventType => "breakpoint";
+    public BreakpointEvent() => EventType = "breakpoint";
 }
 
 public class BreakpointEventBody

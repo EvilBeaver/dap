@@ -5,7 +5,7 @@ namespace EvilBeaver.DAP.Dto.Events;
 
 public class ThreadEvent : Event<ThreadEventBody>
 {
-    public override string EventType => "thread";
+    public ThreadEvent() => EventType = "thread";
 }
 
 public class ThreadEventBody

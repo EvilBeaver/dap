@@ -5,5 +5,5 @@ namespace EvilBeaver.DAP.Dto.Events;
 
 public class InitializedEvent : Event
 {
-    public override string EventType => "initialized";
+    public InitializedEvent() => EventType = "initialized";
 }

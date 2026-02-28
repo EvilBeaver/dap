@@ -1,0 +1,15 @@
+/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP.Server/bin/Debug/net8.0/EvilBeaver.DAP.Server.deps.json
+/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP.Server/bin/Debug/net8.0/EvilBeaver.DAP.Server.dll
+/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP.Server/bin/Debug/net8.0/EvilBeaver.DAP.Server.pdb
+/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP.Server/bin/Debug/net8.0/EvilBeaver.DAP.Dto.dll
+/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP.Server/bin/Debug/net8.0/EvilBeaver.DAP.Dto.pdb
+/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP.Server/obj/Debug/net8.0/EvilBeaver.DAP.Server.csproj.AssemblyReference.cache
+/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP.Server/obj/Debug/net8.0/EvilBeaver.DAP.Server.GeneratedMSBuildEditorConfig.editorconfig
+/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP.Server/obj/Debug/net8.0/EvilBeaver.DAP.Server.AssemblyInfoInputs.cache
+/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP.Server/obj/Debug/net8.0/EvilBeaver.DAP.Server.AssemblyInfo.cs
+/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP.Server/obj/Debug/net8.0/EvilBeaver.DAP.Server.csproj.CoreCompileInputs.cache
+/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP.Server/obj/Debug/net8.0/EvilBeaver.DAP.Server.csproj.CopyComplete
+/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP.Server/obj/Debug/net8.0/EvilBeaver.DAP.Server.dll
+/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP.Server/obj/Debug/net8.0/refint/EvilBeaver.DAP.Server.dll
+/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP.Server/obj/Debug/net8.0/EvilBeaver.DAP.Server.pdb
+/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP.Server/obj/Debug/net8.0/ref/EvilBeaver.DAP.Server.dll

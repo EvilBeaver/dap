@@ -6,7 +6,7 @@ namespace EvilBeaver.DAP.Dto.Events;
 
 public class CapabilitiesEvent : Event<CapabilitiesEventBody>
 {
-    public override string EventType => "capabilities";
+    public CapabilitiesEvent() => EventType = "capabilities";
 }
 
 public class CapabilitiesEventBody

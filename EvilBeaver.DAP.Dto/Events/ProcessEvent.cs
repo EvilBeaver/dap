@@ -5,7 +5,7 @@ namespace EvilBeaver.DAP.Dto.Events;
 
 public class ProcessEvent : Event<ProcessEventBody>
 {
-    public override string EventType => "process";
+    public ProcessEvent() => EventType = "process";
 }
 
 public class ProcessEventBody

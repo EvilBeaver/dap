@@ -5,7 +5,7 @@ namespace EvilBeaver.DAP.Dto.Events;
 
 public class ContinuedEvent : Event<ContinuedEventBody>
 {
-    public override string EventType => "continued";
+    public ContinuedEvent() => EventType = "continued";
 }
 
 public class ContinuedEventBody
