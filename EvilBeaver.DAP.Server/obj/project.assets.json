@@ -2,7 +2,7 @@
   "version": 3,
   "targets": {
     "net8.0": {
-      "EvilBeaver.DAP.Dto/1.0.0": {
+      "EvilBeaver.DAP.Dto/0.1.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "compile": {
@@ -15,7 +15,7 @@
     }
   },
   "libraries": {
-    "EvilBeaver.DAP.Dto/1.0.0": {
+    "EvilBeaver.DAP.Dto/0.1.0": {
       "type": "project",
       "path": "../EvilBeaver.DAP.Dto/EvilBeaver.DAP.Dto.csproj",
       "msbuildProject": "../EvilBeaver.DAP.Dto/EvilBeaver.DAP.Dto.csproj"
@@ -23,14 +23,14 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "EvilBeaver.DAP.Dto >= 1.0.0"
+      "EvilBeaver.DAP.Dto >= 0.1.0"
     ]
   },
   "packageFolders": {
     "/home/andrei/.nuget/packages/": {}
   },
   "project": {
-    "version": "1.0.0",
+    "version": "0.1.0",
     "restore": {
       "projectUniqueName": "/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP.Server/EvilBeaver.DAP.Server.csproj",
       "projectName": "EvilBeaver.DAP.Server",

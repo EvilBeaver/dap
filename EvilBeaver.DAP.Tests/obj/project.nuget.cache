@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "/nKzlhoMYfpRdXBxMpqTUu+YrRZCnDWvD9qYdC/E4GPBKscXZSjtzpjnZ2gRVZqLohO37BD0HdeE64j2xcneHg==",
+  "dgSpecHash": "VmF9/ipQ2+YFIj+LgSBNswmHfcw7KoJY6wenVsGGJq3pEWKOomRh+ZZUljoxoehQe6lQ/CRFjzaSrl0SQx9Sdg==",
   "success": true,
   "projectFilePath": "/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP.Tests/EvilBeaver.DAP.Tests.csproj",
   "expectedPackageFiles": [

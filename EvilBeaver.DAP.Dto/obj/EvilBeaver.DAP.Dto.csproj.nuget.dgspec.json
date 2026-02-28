@@ -5,7 +5,7 @@
   },
   "projects": {
     "/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP.Dto/EvilBeaver.DAP.Dto.csproj": {
-      "version": "1.0.0",
+      "version": "0.1.0",
       "restore": {
         "projectUniqueName": "/home/andrei/git/EvilBeaver/dap/EvilBeaver.DAP.Dto/EvilBeaver.DAP.Dto.csproj",
         "projectName": "EvilBeaver.DAP.Dto",

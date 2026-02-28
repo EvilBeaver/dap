@@ -10,13 +10,16 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("EvilBeaver.DAP.Dto")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("Ovsiankin Andrei aka EvilBeaver")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
-[assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7c7a28775de161885ffedface143f0bd27f35347")]
+[assembly: System.Reflection.AssemblyDescriptionAttribute("Data Transfer Objects and serialization logic for Debug Adapter Protocol (DAP) in" +
+    " .NET.")]
+[assembly: System.Reflection.AssemblyFileVersionAttribute("0.1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("0.1.0+2b6f86fea4a64359e366493cb31b3220d2ab2b3b")]
 [assembly: System.Reflection.AssemblyProductAttribute("EvilBeaver.DAP.Dto")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EvilBeaver.DAP.Dto")]
-[assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
+[assembly: System.Reflection.AssemblyVersionAttribute("0.1.0.0")]
+[assembly: System.Reflection.AssemblyMetadataAttribute("RepositoryUrl", "https://github.com/EvilBeaver/dap")]
 
 // Создано классом WriteCodeFragment MSBuild.
 

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EvilBeaver.DAP.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7c7a28775de161885ffedface143f0bd27f35347")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2b6f86fea4a64359e366493cb31b3220d2ab2b3b")]
 [assembly: System.Reflection.AssemblyProductAttribute("EvilBeaver.DAP.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EvilBeaver.DAP.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
