@@ -1,11 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# 
+#
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvilBeaver.DAP.Dto", "EvilBeaver.DAP.Dto\EvilBeaver.DAP.Dto.csproj", "{5C76EB93-97BA-41EB-994E-553CD8456640}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvilBeaver.DAP.Server", "EvilBeaver.DAP.Server\EvilBeaver.DAP.Server.csproj", "{DBE4B2AD-579C-421F-9277-9CC21728570B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvilBeaver.DAP.Tests", "EvilBeaver.DAP.Tests\EvilBeaver.DAP.Tests.csproj", "{824FB63D-0018-4CFF-B403-1BCD2FED97DB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildItems", "BuildItems", "{26E48250-12E9-4505-A712-CFB2223AF26E}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
