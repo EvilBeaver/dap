@@ -9,7 +9,7 @@
 | Проект | Статус | Назначение |
 |---|---|---|
 | `EvilBeaver.DAP.Dto` | реализован | DTO-классы всех сущностей протокола + сериализация |
-| `EvilBeaver.DAP.Server` | планируется | RPC-сервер: чтение/запись DAP-сообщений через поток |
+| `EvilBeaver.DAP.Server` | частично реализован | RPC-сервер: чтение/запись DAP-сообщений через поток |
 
 ---
 
@@ -88,40 +88,38 @@ Content-Length: <N>\r\n
 
 ---
 
-## EvilBeaver.DAP.Server (планируется)
+## EvilBeaver.DAP.Server
 
 ### Назначение
 
 Готовый к использованию RPC-сервер, принимающий и отправляющий DAP-сообщения через произвольный поток (`Stream`). Реализует:
 
 - чтение/запись заголовков `Content-Length`
-- диспетчеризацию входящих запросов к обработчикам
-- отправку событий из кода адаптера
+- диспетчеризацию входящих запросов к методам адаптера
+- отправку событий из кода адаптера в любой момент
 - поддержку нескольких транспортов: stdio и TCP
 
-### Планируемая структура
+### Структура
 
 ```
 EvilBeaver.DAP.Server
 ├── Transport/
-│   ├── ITransport              — интерфейс: ReadAsync / WriteAsync
-│   ├── StreamTransport         — реализация поверх произвольного Stream
-│   ├── StdioTransport          — Console.OpenStandardInput/Output
-│   └── TcpTransport            — TcpListener / TcpClient
+│   ├── ITransport              — интерфейс: свойства Input / Output (Stream)   [реализован]
+│   ├── StreamTransport         — реализация поверх произвольного Stream         [реализован]
+│   ├── StdioTransport          — Console.OpenStandardInput/Output               [планируется]
+│   └── TcpTransport            — TcpListener / TcpClient                        [планируется]
 │
 ├── Protocol/
-│   ├── DapReader               — чтение заголовков Content-Length + тела из Stream
-│   ├── DapWriter               — запись заголовков + тела в Stream
-│   └── MessageLoop             — основной цикл чтения сообщений
+│   ├── DapReader               — чтение заголовков Content-Length + тела        [реализован]
+│   ├── DapWriter               — запись заголовков + тела в Stream              [реализован]
+│   └── MessageLoop             — основной цикл чтения и диспетчеризации         [планируется]
 │
-├── Dispatching/
-│   ├── IRequestHandler<TReq, TResp>  — интерфейс обработчика одного запроса
-│   ├── RequestDispatcher       — маршрутизация команды к зарегистрированному обработчику
-│   └── HandlerRegistry         — регистрация обработчиков (command → handler)
+├── IClientChannel              — канал для отправки событий клиенту             [реализован]
+├── IDebugAdapter               — интерфейс пользовательского адаптера           [планируется]
 │
-└── DapServer
-    — точка входа: настройка транспорта, регистрация обработчиков, запуск цикла
-    — метод SendEventAsync(Event) для отправки событий из адаптера
+└── DapServer                   — точка входа: транспорт + адаптер + цикл        [частично]
+    — RunAsync(CancellationToken)                                                 [планируется]
+    — SendEventAsync(Event)                                                       [реализован]
 ```
 
 ### Жизненный цикл сервера
@@ -129,15 +127,15 @@ EvilBeaver.DAP.Server
 ```
 DapServer.RunAsync(CancellationToken)
     │
-    ├── [транспорт открыт]
+    ├── IDebugAdapter.ConnectAsync(IClientChannel, ct)   ← адаптер получает канал событий
     │
     └── MessageLoop
-          ┌──────────────────────────────────────────┐
-          │  DapReader.ReadMessageAsync()            │  ← Content-Length + JSON
-          │  DapMessageConverter.Read()              │  ← полиморфная десериализация
-          │  IDebugAdapter.<соответствующий метод>() │  ← пользовательский код
-          │  DapWriter.WriteResponseAsync()          │  ← отправляет Response обратно
-          └──────────────────────────────────────────┘
+          ┌──────────────────────────────────────────────────┐
+          │  DapReader.ReadMessageAsync()                    │  ← Content-Length + JSON
+          │  DapMessageConverter.Read()                      │  ← полиморфная десериализация
+          │  IDebugAdapter.<соответствующий метод>(req, ct)  │  ← пользовательский код
+          │  DapWriter.WriteMessageAsync(response)           │  ← отправляет Response обратно
+          └──────────────────────────────────────────────────┘
 ```
 
 ### Транспорты
@@ -149,60 +147,74 @@ DapServer.RunAsync(CancellationToken)
 
 ### API адаптера
 
-Пользовательский код реализует интерфейс `IDebugAdapter`. Каждый метод интерфейса соответствует одному DAP-запросу. Сервер вызывает нужный метод, передавая типизированные аргументы запроса и объект `IClientChannel` — канал для отправки событий обратно клиенту.
+#### IClientChannel
+
+Минимальный интерфейс для отправки событий в IDE. Передаётся адаптеру **один раз** при запуске сервера через `IDebugAdapter.ConnectAsync`. Адаптер хранит ссылку и использует её в любой момент — в том числе из фоновых потоков при срабатывании точек останова.
 
 ```csharp
 public interface IClientChannel
 {
     Task SendEventAsync(Event @event, CancellationToken ct = default);
 }
+```
 
+#### IDebugAdapter
+
+Пользовательский код реализует этот интерфейс. Каждый метод соответствует одному DAP-запросу. `IClientChannel` не передаётся в каждый метод — он предоставляется один раз через `ConnectAsync` до начала цикла обработки сообщений.
+
+```csharp
 public interface IDebugAdapter
 {
-    Task<InitializeResponse> InitializeAsync(
-        InitializeRequest request, IClientChannel client, CancellationToken ct);
+    /// <summary>
+    /// Вызывается перед запуском цикла сообщений.
+    /// Адаптер должен сохранить <paramref name="channel"/> для последующей отправки событий.
+    /// </summary>
+    Task ConnectAsync(IClientChannel channel, CancellationToken ct);
 
-    Task<LaunchResponse> LaunchAsync(
-        LaunchRequest request, IClientChannel client, CancellationToken ct);
+    Task<InitializeResponse> InitializeAsync(InitializeRequest request, CancellationToken ct);
 
-    Task<SetBreakpointsResponse> SetBreakpointsAsync(
-        SetBreakpointsRequest request, IClientChannel client, CancellationToken ct);
+    Task<LaunchResponse> LaunchAsync(LaunchRequest request, CancellationToken ct);
 
-    Task<ConfigurationDoneResponse> ConfigurationDoneAsync(
-        ConfigurationDoneRequest request, IClientChannel client, CancellationToken ct);
+    Task<SetBreakpointsResponse> SetBreakpointsAsync(SetBreakpointsRequest request, CancellationToken ct);
 
-    Task<ThreadsResponse> ThreadsAsync(
-        ThreadsRequest request, IClientChannel client, CancellationToken ct);
+    Task<ConfigurationDoneResponse> ConfigurationDoneAsync(ConfigurationDoneRequest request, CancellationToken ct);
 
-    Task<StackTraceResponse> StackTraceAsync(
-        StackTraceRequest request, IClientChannel client, CancellationToken ct);
+    Task<ThreadsResponse> ThreadsAsync(ThreadsRequest request, CancellationToken ct);
+
+    Task<StackTraceResponse> StackTraceAsync(StackTraceRequest request, CancellationToken ct);
 
     // ... остальные запросы протокола
 }
 ```
 
-Пример реализации адаптера с отправкой события через `IClientChannel`:
+#### Пример реализации адаптера
 
 ```csharp
 public class MyDebugAdapter : IDebugAdapter
 {
-    public async Task<LaunchResponse> LaunchAsync(
-        LaunchRequest request, IClientChannel client, CancellationToken ct)
+    private IClientChannel _channel = null!;
+
+    public Task ConnectAsync(IClientChannel channel, CancellationToken ct)
+    {
+        _channel = channel;
+        return Task.CompletedTask;
+    }
+
+    public async Task<LaunchResponse> LaunchAsync(LaunchRequest request, CancellationToken ct)
     {
         // запустить отлаживаемый процесс...
 
-        await client.SendEventAsync(new InitializedEvent(), ct);
+        await _channel.SendEventAsync(new InitializedEvent(), ct);
 
         return new LaunchResponse { Success = true };
     }
 
-    public async Task<ContinueResponse> ContinueAsync(
-        ContinueRequest request, IClientChannel client, CancellationToken ct)
+    public async Task<ContinueResponse> ContinueAsync(ContinueRequest request, CancellationToken ct)
     {
         // возобновить выполнение...
 
-        // позднее, из другого потока, при срабатывании точки останова:
-        await client.SendEventAsync(new StoppedEvent
+        // позднее, из фонового потока, при срабатывании точки останова:
+        await _channel.SendEventAsync(new StoppedEvent
         {
             Body = new StoppedEvent.EventBody
             {
@@ -217,7 +229,7 @@ public class MyDebugAdapter : IDebugAdapter
 }
 ```
 
-Запуск сервера:
+#### Запуск сервера
 
 ```csharp
 var adapter = new MyDebugAdapter();
@@ -241,7 +253,7 @@ EvilBeaver.DAP.Server
 ```
 EvilBeaver.DAP.sln
 ├── EvilBeaver.DAP.Dto/         — net8.0, без внешних зависимостей
-└── EvilBeaver.DAP.Server/      — net8.0 (планируется)
+└── EvilBeaver.DAP.Server/      — net8.0
 ```
 
 Целевая платформа: **.NET 8**, nullable annotations включены.
