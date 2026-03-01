@@ -12,7 +12,11 @@ public class DapReader
 {
     private readonly Stream _input;
     private const string ContentLengthHeader = "Content-Length: ";
+#if NET8_0_OR_GREATER
     private static readonly byte[] HeaderSeparator = "\r\n\r\n"u8.ToArray();
+#else
+    private static readonly byte[] HeaderSeparator = Encoding.UTF8.GetBytes("\r\n\r\n");
+#endif
 
     public DapReader(Stream input)
     {
@@ -31,7 +35,11 @@ public class DapReader
         var totalRead = 0;
         while (totalRead < contentLength)
         {
+#if NET8_0_OR_GREATER
             var read = await _input.ReadAsync(bodyBuffer.AsMemory(totalRead, contentLength - totalRead), ct);
+#else
+            var read = await _input.ReadAsync(bodyBuffer, totalRead, contentLength - totalRead, ct);
+#endif
             if (read == 0)
             {
                 throw new EndOfStreamException("Unexpected end of stream while reading message body.");
@@ -50,7 +58,11 @@ public class DapReader
 
         while (true)
         {
+#if NET8_0_OR_GREATER
             var read = await _input.ReadAsync(buffer.AsMemory(), ct);
+#else
+            var read = await _input.ReadAsync(buffer, 0, 1, ct);
+#endif
             if (read == 0)
             {
                 return -1;
@@ -75,7 +87,11 @@ public class DapReader
         }
 
         var headers = headerBuilder.ToString();
+#if NET8_0_OR_GREATER
         var lines = headers.Split("\r\n", StringSplitOptions.RemoveEmptyEntries);
+#else
+        var lines = headers.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+#endif
         foreach (var line in lines)
         {
             if (line.StartsWith(ContentLengthHeader, StringComparison.OrdinalIgnoreCase))

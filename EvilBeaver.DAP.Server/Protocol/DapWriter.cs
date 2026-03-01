@@ -26,8 +26,13 @@ public class DapWriter
         var header = $"Content-Length: {bodyBytes.Length}\r\n\r\n";
         var headerBytes = Utf8NoBom.GetBytes(header);
 
+#if NET8_0_OR_GREATER
         await _output.WriteAsync(headerBytes, ct);
         await _output.WriteAsync(bodyBytes, ct);
+#else
+        await _output.WriteAsync(headerBytes, 0, headerBytes.Length, ct);
+        await _output.WriteAsync(bodyBytes, 0, bodyBytes.Length, ct);
+#endif
         await _output.FlushAsync(ct);
     }
 }
