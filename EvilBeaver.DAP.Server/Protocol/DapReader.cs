@@ -12,11 +12,8 @@ public class DapReader
 {
     private readonly Stream _input;
     private const string ContentLengthHeader = "Content-Length: ";
-#if NET8_0_OR_GREATER
+
     private static readonly byte[] HeaderSeparator = "\r\n\r\n"u8.ToArray();
-#else
-    private static readonly byte[] HeaderSeparator = Encoding.UTF8.GetBytes("\r\n\r\n");
-#endif
 
     public DapReader(Stream input)
     {
