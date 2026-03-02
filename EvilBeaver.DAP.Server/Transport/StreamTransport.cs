@@ -7,25 +7,14 @@ using System.Threading.Tasks;
 
 namespace EvilBeaver.DAP.Server.Transport;
 
-public class StreamTransport : ITransport
+public class StreamTransport(Stream input, Stream output) : ITransport
 {
-    public StreamTransport(Stream input, Stream output)
-    {
-        Input = input ?? throw new ArgumentNullException(nameof(input));
-        Output = output ?? throw new ArgumentNullException(nameof(output));
-    }
+    public Stream Input { get; } = input ?? throw new ArgumentNullException(nameof(input));
+    public Stream Output { get; } = output ?? throw new ArgumentNullException(nameof(output));
 
-    public Stream Input { get; }
-    public Stream Output { get; }
-
-    public ValueTask DisposeAsync()
+    public void Dispose()
     {
         Input.Dispose();
         Output.Dispose();
-#if NET8_0_OR_GREATER
-        return ValueTask.CompletedTask;
-#else
-        return new ValueTask(Task.CompletedTask);
-#endif
     }
 }

@@ -27,7 +27,7 @@ public class DapServer : IClientChannel
 
     public async Task RunAsync(CancellationToken ct = default)
     {
-        await _adapter.ConnectAsync(this, ct);
+        await _adapter.OnServerStartAsync(this, ct);
         var loop = new MessageLoop(_reader, _writer, _adapter, NextSeq);
         await loop.RunAsync(ct);
     }

@@ -8,7 +8,7 @@ namespace EvilBeaver.DAP.Server;
 
 public interface IDebugAdapter
 {
-    Task ConnectAsync(IClientChannel channel, CancellationToken ct);
+    Task OnServerStartAsync(IClientChannel channel, CancellationToken ct);
 
     Task<AttachResponse> AttachAsync(AttachRequest request, CancellationToken ct);
     Task<BreakpointLocationsResponse> BreakpointLocationsAsync(BreakpointLocationsRequest request, CancellationToken ct);

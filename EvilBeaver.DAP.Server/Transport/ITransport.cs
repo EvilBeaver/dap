@@ -6,7 +6,7 @@ using System;
 
 namespace EvilBeaver.DAP.Server.Transport;
 
-public interface ITransport : IAsyncDisposable
+public interface ITransport : IDisposable
 {
     Stream Input { get; }
     Stream Output { get; }
