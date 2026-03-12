@@ -8,7 +8,7 @@ using EvilBeaver.DAP.Dto.Serialization;
 
 namespace EvilBeaver.DAP.Server.Protocol;
 
-public class DapReader
+internal class DapReader
 {
     private readonly Stream _input;
     private const string ContentLengthHeader = "Content-Length: ";
@@ -44,7 +44,11 @@ public class DapReader
             totalRead += read;
         }
 
+#if NET8_0_OR_GREATER
+        return DapSerializer.Deserialize(bodyBuffer.AsSpan());
+#else
         return DapSerializer.Deserialize(bodyBuffer);
+#endif
     }
 
     private async Task<int> ReadContentLengthAsync(CancellationToken ct)

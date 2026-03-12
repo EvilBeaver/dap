@@ -16,6 +16,7 @@ public class DapServer : IClientChannel
     private readonly DapReader _reader;
     private readonly DapWriter _writer;
     private int _seq;
+    private CancellationTokenSource? _shutdownCts;
 
     public DapServer(ITransport transport, IDebugAdapter adapter)
     {
@@ -27,15 +28,30 @@ public class DapServer : IClientChannel
 
     public async Task RunAsync(CancellationToken ct = default)
     {
-        await _adapter.OnServerStartAsync(this, ct);
-        var loop = new MessageLoop(_reader, _writer, _adapter, NextSeq);
-        await loop.RunAsync(ct);
+        _shutdownCts = new CancellationTokenSource();
+        using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(ct, _shutdownCts.Token);
+        try
+        {
+            await _adapter.OnServerStartAsync(this, ct);
+            var loop = new MessageLoop(_reader, _writer, _adapter, NextSeq);
+            await loop.RunAsync(linkedCts.Token);
+        }
+        finally
+        {
+            _shutdownCts.Dispose();
+            _shutdownCts = null;
+        }
     }
 
     public Task SendEventAsync(Event @event, CancellationToken ct = default)
     {
         @event.Seq = NextSeq();
         return _writer.WriteMessageAsync(@event, ct);
+    }
+
+    public void Shutdown()
+    {
+        _shutdownCts?.Cancel();
     }
 
     private int NextSeq() => Interlocked.Increment(ref _seq);

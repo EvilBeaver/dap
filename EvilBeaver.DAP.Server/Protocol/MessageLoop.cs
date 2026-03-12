@@ -10,8 +10,17 @@ namespace EvilBeaver.DAP.Server.Protocol;
 
 internal sealed class MessageLoop
 {
+    private const string ErrorNotSupported = "notSupported";
+    private const string ErrorInvalidRequest = "invalidRequest";
+    private const string ErrorInternalError = "internalError";
+
+    private const int ErrorIdUnsupportedCommand = 1001;
+    private const int ErrorIdInvalidRequestPayload = 1002;
+    private const int ErrorIdUnhandledAdapterError = 1003;
+
     private readonly DapReader _reader;
     private readonly DapWriter _writer;
+    private readonly IDebugAdapter _adapter;
     private readonly Dictionary<string, Func<Request, CancellationToken, Task<Response>>> _handlers;
     private readonly Func<int> _nextSeq;
 
@@ -23,12 +32,8 @@ internal sealed class MessageLoop
     {
         _reader = reader ?? throw new ArgumentNullException(nameof(reader));
         _writer = writer ?? throw new ArgumentNullException(nameof(writer));
+        _adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
         _nextSeq = nextSeq ?? throw new ArgumentNullException(nameof(nextSeq));
-
-        if (adapter is null)
-        {
-            throw new ArgumentNullException(nameof(adapter));
-        }
 
         _handlers = new Dictionary<string, Func<Request, CancellationToken, Task<Response>>>(StringComparer.Ordinal)
         {
@@ -82,9 +87,24 @@ internal sealed class MessageLoop
     {
         while (!ct.IsCancellationRequested)
         {
-            var message = await _reader.ReadMessageAsync(ct);
+            ProtocolMessage? message;
+            try
+            {
+                message = await _reader.ReadMessageAsync(ct);
+            }
+            catch (OperationCanceledException) when (ct.IsCancellationRequested)
+            {
+                return;
+            }
+            catch (EndOfStreamException)
+            {
+                try { await _adapter.OnClientDisconnectedAsync(ct); } catch { }
+                return;
+            }
+
             if (message is null)
             {
+                try { await _adapter.OnClientDisconnectedAsync(ct); } catch { }
                 return;
             }
 
@@ -104,7 +124,7 @@ internal sealed class MessageLoop
             }
             catch (Exception ex)
             {
-                response = CreateErrorResponse($"Unhandled adapter error: {ex.Message}");
+                response = CreateErrorResponse(ErrorInternalError, ErrorIdUnhandledAdapterError, $"Unhandled adapter error: {ex.Message}");
             }
 
             response.RequestSeq = request.Seq;
@@ -118,7 +138,7 @@ internal sealed class MessageLoop
     {
         if (!_handlers.TryGetValue(request.Command, out var handler))
         {
-            return CreateErrorResponse($"Unsupported command: {request.Command}");
+            return CreateErrorResponse(ErrorNotSupported, ErrorIdUnsupportedCommand, $"Unsupported command: {request.Command}");
         }
 
         try
@@ -129,7 +149,7 @@ internal sealed class MessageLoop
         }
         catch (InvalidCastException)
         {
-            return CreateErrorResponse($"Invalid request payload for command: {request.Command}");
+            return CreateErrorResponse(ErrorInvalidRequest, ErrorIdInvalidRequestPayload, $"Invalid request payload for command: {request.Command}");
         }
     }
 
@@ -150,17 +170,18 @@ internal sealed class MessageLoop
         };
     }
 
-    private static ErrorResponse CreateErrorResponse(string message)
+    private static ErrorResponse CreateErrorResponse(string code, int id, string details)
     {
         return new ErrorResponse
         {
             Success = false,
-            Message = message,
+            Message = code,
             Body = new ErrorResponseBody
             {
                 Error = new Message
                 {
-                    Format = message
+                    Id = id,
+                    Format = details
                 }
             }
         };

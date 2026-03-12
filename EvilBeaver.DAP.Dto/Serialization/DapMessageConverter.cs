@@ -106,7 +106,7 @@ public class DapMessageConverter : JsonConverter
         {
             "request" => jo["command"]?.Value<string>() is string cmd
                 && DapMessageTypes.RequestTypes.TryGetValue(cmd, out var t) ? t : typeof(Request),
-            "response" => typeof(Response),
+            "response" => jo["success"]?.Value<bool>() == false ? typeof(ErrorResponse) : typeof(Response),
             "event" => jo["event"]?.Value<string>() is string evt
                 && DapMessageTypes.EventTypes.TryGetValue(evt, out var t) ? t : typeof(Event),
             _ => typeof(ProtocolMessage)
@@ -144,13 +144,13 @@ public class DapMessageConverter : JsonConverter<ProtocolMessage>
         {
             "request" => root.TryGetProperty("command", out var cmdProp)
                 && DapMessageTypes.RequestTypes.TryGetValue(cmdProp.GetString() ?? "", out var t) ? t : typeof(Request),
-            "response" => typeof(Response),
+            "response" => root.TryGetProperty("success", out var successProp) && !successProp.GetBoolean() ? typeof(ErrorResponse) : typeof(Response),
             "event" => root.TryGetProperty("event", out var eventProp)
                 && DapMessageTypes.EventTypes.TryGetValue(eventProp.GetString() ?? "", out var t) ? t : typeof(Event),
             _ => typeof(ProtocolMessage)
         };
 
-        return (ProtocolMessage?)JsonSerializer.Deserialize(root.GetRawText(), targetType, options);
+        return (ProtocolMessage?)JsonSerializer.Deserialize(root, targetType, options);
     }
 
     public override void Write(Utf8JsonWriter writer, ProtocolMessage value, JsonSerializerOptions options)

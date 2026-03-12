@@ -10,6 +10,8 @@ public interface IDebugAdapter
 {
     Task OnServerStartAsync(IClientChannel channel, CancellationToken ct);
 
+    Task OnClientDisconnectedAsync(CancellationToken ct);
+
     Task<AttachResponse> AttachAsync(AttachRequest request, CancellationToken ct);
     Task<BreakpointLocationsResponse> BreakpointLocationsAsync(BreakpointLocationsRequest request, CancellationToken ct);
     Task<CancelResponse> CancelAsync(CancelRequest request, CancellationToken ct);

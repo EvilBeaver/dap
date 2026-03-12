@@ -39,14 +39,6 @@ public static class DapSerializer
         var json = Encoding.UTF8.GetString(utf8);
         return Deserialize(json);
     }
-    
-#if !NETSTANDARD2_0
-    public static ProtocolMessage? Deserialize(ReadOnlySpan<byte> utf8)
-    {
-        var json = Encoding.UTF8.GetString(utf8.ToArray());
-        return Deserialize(json);
-    }
-#endif
 #else
     private static readonly JsonSerializerOptions Options = new()
     {

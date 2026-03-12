@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 using System;
-using System.Threading.Tasks;
 
 namespace EvilBeaver.DAP.Server.Transport;
 
@@ -14,7 +13,6 @@ public class StreamTransport(Stream input, Stream output) : ITransport
 
     public void Dispose()
     {
-        Input.Dispose();
-        Output.Dispose();
+        // Streams are owned by the host and should be disposed by the host.
     }
 }
