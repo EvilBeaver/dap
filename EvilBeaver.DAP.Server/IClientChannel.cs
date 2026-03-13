@@ -6,9 +6,17 @@ using EvilBeaver.DAP.Dto.Base;
 
 namespace EvilBeaver.DAP.Server;
 
+/// <summary>
+/// Интерфейс для взаимодействия с клиентом DAP (IDE).
+/// Позволяет отправлять события на сторону IDE.
+/// </summary>
 public interface IClientChannel
 {
+    /// <summary>
+    /// Отправляет асинхронное событие клиенту.
+    /// </summary>
+    /// <param name="event">Объект события для отправки.</param>
+    /// <param name="ct">Токен отмены операции.</param>
+    /// <returns>Задача, представляющая процесс отправки.</returns>
     Task SendEventAsync(Event @event, CancellationToken ct = default);
-
-    void Shutdown();
 }

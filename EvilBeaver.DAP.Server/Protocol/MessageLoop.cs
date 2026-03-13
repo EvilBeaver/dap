@@ -22,18 +22,15 @@ internal sealed class MessageLoop
     private readonly DapWriter _writer;
     private readonly IDebugAdapter _adapter;
     private readonly Dictionary<string, Func<Request, CancellationToken, Task<Response>>> _handlers;
-    private readonly Func<int> _nextSeq;
 
     public MessageLoop(
         DapReader reader,
         DapWriter writer,
-        IDebugAdapter adapter,
-        Func<int> nextSeq)
+        IDebugAdapter adapter)
     {
         _reader = reader ?? throw new ArgumentNullException(nameof(reader));
         _writer = writer ?? throw new ArgumentNullException(nameof(writer));
         _adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
-        _nextSeq = nextSeq ?? throw new ArgumentNullException(nameof(nextSeq));
 
         _handlers = new Dictionary<string, Func<Request, CancellationToken, Task<Response>>>(StringComparer.Ordinal)
         {
@@ -45,7 +42,6 @@ internal sealed class MessageLoop
             ["continue"] = CreateHandler<ContinueRequest, ContinueResponse>(adapter.ContinueAsync),
             ["dataBreakpointInfo"] = CreateHandler<DataBreakpointInfoRequest, DataBreakpointInfoResponse>(adapter.DataBreakpointInfoAsync),
             ["disassemble"] = CreateHandler<DisassembleRequest, DisassembleResponse>(adapter.DisassembleAsync),
-            ["disconnect"] = CreateHandler<DisconnectRequest, DisconnectResponse>(adapter.DisconnectAsync),
             ["evaluate"] = CreateHandler<EvaluateRequest, EvaluateResponse>(adapter.EvaluateAsync),
             ["exceptionInfo"] = CreateHandler<ExceptionInfoRequest, ExceptionInfoResponse>(adapter.ExceptionInfoAsync),
             ["goto"] = CreateHandler<GotoRequest, GotoResponse>(adapter.GotoAsync),
@@ -113,6 +109,12 @@ internal sealed class MessageLoop
                 continue;
             }
 
+            if (request is DisconnectRequest disconnectRequest)
+            {
+                await HandleDisconnectAsync(disconnectRequest, ct);
+                return;
+            }
+
             Response response;
             try
             {
@@ -129,9 +131,31 @@ internal sealed class MessageLoop
 
             response.RequestSeq = request.Seq;
             response.Command = request.Command;
-            response.Seq = _nextSeq();
             await _writer.WriteMessageAsync(response, ct);
         }
+    }
+
+    private async Task HandleDisconnectAsync(DisconnectRequest request, CancellationToken ct)
+    {
+        Response response;
+        try
+        {
+            var result = await _adapter.DisconnectAsync(request, ct);
+            result.Success = true;
+            response = result;
+        }
+        catch (OperationCanceledException) when (ct.IsCancellationRequested)
+        {
+            return;
+        }
+        catch (Exception ex)
+        {
+            response = CreateErrorResponse(ErrorInternalError, ErrorIdUnhandledAdapterError, $"Unhandled adapter error: {ex.Message}");
+        }
+
+        response.RequestSeq = request.Seq;
+        response.Command = request.Command;
+        await _writer.WriteMessageAsync(response, ct);
     }
 
     private async Task<Response> DispatchAsync(Request request, CancellationToken ct)
