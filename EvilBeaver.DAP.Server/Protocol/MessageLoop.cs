@@ -124,6 +124,10 @@ internal sealed class MessageLoop
             {
                 return;
             }
+            catch (AdapterNotSupportedException ex)
+            {
+                response = CreateErrorResponse(ErrorNotSupported, ErrorIdUnsupportedCommand, ex.Message);
+            }
             catch (Exception ex)
             {
                 response = CreateErrorResponse(ErrorInternalError, ErrorIdUnhandledAdapterError, $"Unhandled adapter error: {ex.Message}");
@@ -148,6 +152,10 @@ internal sealed class MessageLoop
         {
             return;
         }
+        catch (AdapterNotSupportedException ex)
+        {
+            response = CreateErrorResponse(ErrorNotSupported, ErrorIdUnsupportedCommand, ex.Message);
+        }
         catch (Exception ex)
         {
             response = CreateErrorResponse(ErrorInternalError, ErrorIdUnhandledAdapterError, $"Unhandled adapter error: {ex.Message}");
@@ -156,6 +164,8 @@ internal sealed class MessageLoop
         response.RequestSeq = request.Seq;
         response.Command = request.Command;
         await _writer.WriteMessageAsync(response, ct);
+
+        try { await _adapter.OnClientDisconnectedAsync(ct); } catch { }
     }
 
     private async Task<Response> DispatchAsync(Request request, CancellationToken ct)
