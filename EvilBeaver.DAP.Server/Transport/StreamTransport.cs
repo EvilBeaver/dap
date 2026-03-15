@@ -6,6 +6,10 @@ using System;
 
 namespace EvilBeaver.DAP.Server.Transport;
 
+/// <summary>
+/// Simple stream transport which does not own streams and does not dispose them.
+/// It's up to client to properly close those streams.
+/// </summary>
 public class StreamTransport(Stream input, Stream output) : ITransport
 {
     public Stream Input { get; } = input ?? throw new ArgumentNullException(nameof(input));

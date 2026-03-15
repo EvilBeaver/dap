@@ -24,4 +24,8 @@
   <ItemGroup>
     <InternalsVisibleTo Include="EvilBeaver.DAP.Tests" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.3" />
+  </ItemGroup>
 </Project>

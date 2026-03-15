@@ -5,20 +5,34 @@
 using EvilBeaver.DAP.Dto.Base;
 using EvilBeaver.DAP.Server.Protocol;
 using EvilBeaver.DAP.Server.Transport;
+using Microsoft.Extensions.Logging;
 
 namespace EvilBeaver.DAP.Server;
 
+/// <summary>
+/// Runs message loop that listens to specified input and output streams
+/// And calls methods of debug adapter.
+/// </summary>
 public class DapServer : IClientChannel
 {
     private readonly ITransport _transport;
     private readonly IDebugAdapter _adapter;
+    private readonly ILoggerFactory? _loggerFactory;
     private readonly DapReader _reader;
     private readonly DapWriter _writer;
 
-    public DapServer(ITransport transport, IDebugAdapter adapter)
+    /// <summary>
+    /// Creates server for DAP messages processing
+    /// </summary>
+    /// <param name="transport">Transport for client communication</param>
+    /// <param name="adapter">Debug adapter implementation</param>
+    /// <param name="loggerFactory">Factory for create loggers for server infrastructure</param>
+    public DapServer(ITransport transport, IDebugAdapter adapter, ILoggerFactory? loggerFactory = null)
     {
         _transport = transport ?? throw new ArgumentNullException(nameof(transport));
         _adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
+        _loggerFactory = loggerFactory;
+        
         _reader = new DapReader(_transport.Input);
         _writer = new DapWriter(_transport.Output);
     }

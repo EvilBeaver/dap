@@ -32,7 +32,7 @@ public class MessageLoopTests
         adapterMock.Setup(a => a.OnClientDisconnectedAsync(It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
-        var loop = new MessageLoop(reader, writer, adapterMock.Object, () => nextSeq++);
+        var loop = new MessageLoop(reader, writer, adapterMock.Object);
         var cts = new CancellationTokenSource();
 
         // Act
@@ -72,9 +72,8 @@ public class MessageLoopTests
             .ThrowsAsync(new Exception("Test exception"));
         adapterMock.Setup(a => a.OnClientDisconnectedAsync(It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
-
-        var nextSeq = 1;
-        var loop = new MessageLoop(reader, writer, adapterMock.Object, () => nextSeq++);
+        
+        var loop = new MessageLoop(reader, writer, adapterMock.Object);
         var cts = new CancellationTokenSource();
 
         // Act
@@ -112,8 +111,7 @@ public class MessageLoopTests
         adapterMock.Setup(a => a.OnClientDisconnectedAsync(It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
-        var nextSeq = 1;
-        var loop = new MessageLoop(reader, writer, adapterMock.Object, () => nextSeq++);
+        var loop = new MessageLoop(reader, writer, adapterMock.Object);
 
         // Act — цикл должен завершиться сам: после disconnect поток заканчивается (EOF)
         using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
@@ -144,7 +142,7 @@ public class MessageLoopTests
         adapterMock.Setup(a => a.OnClientDisconnectedAsync(It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
-        var loop = new MessageLoop(reader, writer, adapterMock.Object, () => 1);
+        var loop = new MessageLoop(reader, writer, adapterMock.Object);
 
         // Act
         using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
@@ -168,7 +166,7 @@ public class MessageLoopTests
         adapterMock.Setup(a => a.OnClientDisconnectedAsync(It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
-        var loop = new MessageLoop(reader, writer, adapterMock.Object, () => 1);
+        var loop = new MessageLoop(reader, writer, adapterMock.Object);
 
         // Act
         using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
