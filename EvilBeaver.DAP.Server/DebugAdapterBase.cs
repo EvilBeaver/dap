@@ -18,7 +18,7 @@ public abstract class DebugAdapterBase : IDebugAdapter
     /// Channel for sending events to the client (IDE).
     /// Available after <see cref="OnServerStartAsync"/> is called.
     /// </summary>
-    protected IClientChannel Channel { get; private set; } = null!;
+    protected IClientChannel EventsChannel { get; private set; } = null!;
 
     /// <summary>
     /// Client parameters obtained in the 'initialize' request.
@@ -33,12 +33,12 @@ public abstract class DebugAdapterBase : IDebugAdapter
     /// </summary>
     public Task OnServerStartAsync(IClientChannel channel, CancellationToken ct)
     {
-        Channel = channel ?? throw new ArgumentNullException(nameof(channel));
+        EventsChannel = channel ?? throw new ArgumentNullException(nameof(channel));
         return OnServerStartedAsync(ct);
     }
 
     /// <summary>
-    /// Called after <see cref="Channel"/> is saved.
+    /// Called after <see cref="EventsChannel"/> is saved.
     /// Inheritors can override this method for their startup logic.
     /// </summary>
     protected virtual Task OnServerStartedAsync(CancellationToken ct)
@@ -158,7 +158,7 @@ public abstract class DebugAdapterBase : IDebugAdapter
     /// Override this method to declare the adapter's <see cref="Capabilities"/>.
     /// <para>
     /// Concrete adapter is responsible for sending the <c>initialized</c> event
-    /// through <see cref="Channel"/> when it is ready to accept configuration
+    /// through <see cref="EventsChannel"/> when it is ready to accept configuration
     /// requests from the client.
     /// </para>
     /// </summary>
@@ -322,7 +322,7 @@ public abstract class DebugAdapterBase : IDebugAdapter
     public virtual Task<ThreadsResponse> ThreadsAsync(ThreadsRequest request, CancellationToken ct) => Task.FromResult(new ThreadsResponse
     {
         Success = true,
-        Body = new ThreadsResponseBody { Threads = Array.Empty<EvilBeaver.DAP.Dto.Types.Thread>() }
+        Body = new ThreadsResponseBody { Threads = Array.Empty<Dto.Types.Thread>() }
     });
 
     /// <inheritdoc />

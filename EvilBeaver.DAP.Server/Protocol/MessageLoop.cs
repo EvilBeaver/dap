@@ -5,6 +5,8 @@
 using EvilBeaver.DAP.Dto.Base;
 using EvilBeaver.DAP.Dto.Requests;
 using EvilBeaver.DAP.Dto.Types;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace EvilBeaver.DAP.Server.Protocol;
 
@@ -22,15 +24,21 @@ internal sealed class MessageLoop
     private readonly DapWriter _writer;
     private readonly IDebugAdapter _adapter;
     private readonly Dictionary<string, Func<Request, CancellationToken, Task<Response>>> _handlers;
+    
+    private readonly ILogger _logger;
 
     public MessageLoop(
         DapReader reader,
         DapWriter writer,
-        IDebugAdapter adapter)
+        IDebugAdapter adapter,
+        ILoggerFactory? loggerFactory = null)
     {
         _reader = reader ?? throw new ArgumentNullException(nameof(reader));
         _writer = writer ?? throw new ArgumentNullException(nameof(writer));
         _adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
+
+        var activeFactory = loggerFactory ?? new NullLoggerFactory();
+        _logger = activeFactory.CreateLogger<MessageLoop>();
 
         _handlers = new Dictionary<string, Func<Request, CancellationToken, Task<Response>>>(StringComparer.Ordinal)
         {
@@ -81,6 +89,7 @@ internal sealed class MessageLoop
 
     public async Task RunAsync(CancellationToken ct)
     {
+        _logger.LogInformation("Starting DAP Server");
         while (!ct.IsCancellationRequested)
         {
             ProtocolMessage? message;
@@ -90,29 +99,33 @@ internal sealed class MessageLoop
             }
             catch (OperationCanceledException) when (ct.IsCancellationRequested)
             {
-                return;
+                _logger.LogInformation("Message loop cancellation requested. Exiting");
+                break;
             }
-            catch (EndOfStreamException)
+            catch (EndOfStreamException e)
             {
-                try { await _adapter.OnClientDisconnectedAsync(ct); } catch { }
-                return;
+                _logger.LogError(e, "Input stream EOF. Exiting");
+                await CallOnClientDisconnect(ct);
+                break;
             }
 
             if (message is null)
             {
-                try { await _adapter.OnClientDisconnectedAsync(ct); } catch { }
-                return;
+                _logger.LogError("Received null message. Maybe input EOF. Exiting");
+                await CallOnClientDisconnect(ct);
+                break;
             }
 
             if (message is not Request request)
             {
+                _logger.LogWarning("Unexpected message type {Type}. Expecting Request", message.GetType());
                 continue;
             }
 
             if (request is DisconnectRequest disconnectRequest)
             {
                 await HandleDisconnectAsync(disconnectRequest, ct);
-                return;
+                break;
             }
 
             Response response;
@@ -122,7 +135,7 @@ internal sealed class MessageLoop
             }
             catch (OperationCanceledException) when (ct.IsCancellationRequested)
             {
-                return;
+                break;
             }
             catch (AdapterNotSupportedException ex)
             {
@@ -137,11 +150,26 @@ internal sealed class MessageLoop
             response.Command = request.Command;
             await _writer.WriteMessageAsync(response, ct);
         }
+        _logger.LogInformation("DAP Server stopped");
+    }
+
+    private async Task CallOnClientDisconnect(CancellationToken ct)
+    {
+        try
+        {
+            _logger.LogDebug("Notifying adapter about disconnect");
+            await _adapter.OnClientDisconnectedAsync(ct);
+        }
+        catch(Exception innerExc)
+        {
+            _logger.LogError(innerExc, "Unexpected adapter error");
+        }
     }
 
     private async Task HandleDisconnectAsync(DisconnectRequest request, CancellationToken ct)
     {
         Response response;
+        _logger.LogDebug("Disconnect request received. Starting exit sequence.");
         try
         {
             var result = await _adapter.DisconnectAsync(request, ct);
@@ -165,24 +193,28 @@ internal sealed class MessageLoop
         response.Command = request.Command;
         await _writer.WriteMessageAsync(response, ct);
 
-        try { await _adapter.OnClientDisconnectedAsync(ct); } catch { }
+        await CallOnClientDisconnect(ct);
     }
 
     private async Task<Response> DispatchAsync(Request request, CancellationToken ct)
     {
         if (!_handlers.TryGetValue(request.Command, out var handler))
         {
+            _logger.LogWarning("No handler registered for {Command}", request.Command);
             return CreateErrorResponse(ErrorNotSupported, ErrorIdUnsupportedCommand, $"Unsupported command: {request.Command}");
         }
 
         try
         {
+            _logger.LogDebug("Dispatching command {Command}", request.Command);
             var response = await handler(request, ct);
             response.Success = true;
+            _logger.LogDebug("Done dispatching command {Command}", request.Command);
             return response;
         }
-        catch (InvalidCastException)
+        catch (InvalidCastException e)
         {
+            _logger.LogWarning(e, "Payload for command {Command} had invalid type", request.Command);
             return CreateErrorResponse(ErrorInvalidRequest, ErrorIdInvalidRequestPayload, $"Invalid request payload for command: {request.Command}");
         }
     }
@@ -194,8 +226,7 @@ internal sealed class MessageLoop
     {
         return async (request, ct) =>
         {
-            var typedRequest = request as TRequest;
-            if (typedRequest is null)
+            if (request is not TRequest typedRequest)
             {
                 throw new InvalidCastException($"Expected request type {typeof(TRequest).Name}, got {request.GetType().Name}.");
             }
