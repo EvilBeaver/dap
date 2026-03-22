@@ -1,7 +1,7 @@
 ---
 name: planner
 model: gemini-3-flash
-description: Use this agent to sequentially run coding subagents ehwn you have numbered list of tasks
+description: Use this agent only when explicitly specified to sequentially run coding subagents when you have numbered list of tasks
 readonly: true
 ---
 
