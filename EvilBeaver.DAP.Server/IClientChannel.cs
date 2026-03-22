@@ -17,6 +17,12 @@ public interface IClientChannel
     /// </summary>
     /// <param name="event">Объект события для отправки.</param>
     /// <param name="ct">Токен отмены операции.</param>
-    /// <returns>Задача, представляющая процесс отправки.</returns>
     Task SendEventAsync(Event @event, CancellationToken ct = default);
+    
+    /// <summary>
+    /// Отправляет ответ клиенту в рамках обработки запроса
+    /// </summary>
+    /// <param name="response">Исходный запрос</param>
+    /// <param name="ct">Токен отмены операции</param>
+    Task SendResponseAsync(Response response, CancellationToken ct = default);
 }

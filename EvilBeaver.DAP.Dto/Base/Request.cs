@@ -17,12 +17,6 @@ public class Request : ProtocolMessage
     /// </summary>
     [JsonPropertyName("command")]
     public string Command { get; set; } = default!;
-
-    /// <summary>
-    /// Object containing arguments for the command.
-    /// </summary>
-    [JsonPropertyName("arguments")]
-    public object? Arguments { get; set; }
 }
 
 /// <summary>
@@ -31,5 +25,5 @@ public class Request : ProtocolMessage
 public class Request<TArgs> : Request
 {
     [JsonPropertyName("arguments")]
-    public new TArgs? Arguments { get; set; }
+    public TArgs Arguments { get; set; }
 }

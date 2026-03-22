@@ -48,4 +48,9 @@ public class DapServer : IClientChannel
     {
         return _writer.WriteMessageAsync(@event, ct);
     }
+
+    public Task SendResponseAsync(Response response, CancellationToken ct = default)
+    {
+        return _writer.WriteMessageAsync(response, ct);
+    }
 }

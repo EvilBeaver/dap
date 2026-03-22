@@ -14,7 +14,7 @@ public class Message
     public int Id { get; set; }
 
     [JsonPropertyName("format")]
-    public string Format { get; set; } = default!;
+    public string Format { get; set; } = "";
 
     [JsonPropertyName("variables")]
     public Dictionary<string, string>? Variables { get; set; }

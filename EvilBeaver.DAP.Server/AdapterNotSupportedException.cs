@@ -8,7 +8,7 @@ namespace EvilBeaver.DAP.Server;
 /// Internal exception used to signal that a DAP command is not supported by the adapter.
 /// This exception is mapped to a "notSupported" DAP response in the message loop.
 /// </summary>
-internal sealed class AdapterNotSupportedException : Exception
+internal sealed class AdapterNotSupportedException : ApplicationException
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="AdapterNotSupportedException"/> class.

@@ -11,6 +11,37 @@ namespace EvilBeaver.DAP.Dto.Base;
 /// </summary>
 public class ErrorResponse : Response<ErrorResponseBody>
 {
+    public override string? ToString()
+    {
+        if (Body?.Error != null)
+        {
+            return BuildText(Body.Error);
+        }
+        else
+        {
+            return base.ToString();
+        }
+    }
+
+    private string? BuildText(Message message)
+    {
+        if (string.IsNullOrEmpty(message.Format))
+        {
+            return "<No message text>";
+        }
+
+        var resultString = message.Format;
+        if (message.Variables == null)
+            return resultString;
+        
+        // Substitution
+        foreach (var messageVariable in message.Variables)
+        {
+            resultString = resultString.Replace("{" + messageVariable.Key + "}", messageVariable.Value);
+        }
+
+        return resultString;
+    }
 }
 
 public class ErrorResponseBody

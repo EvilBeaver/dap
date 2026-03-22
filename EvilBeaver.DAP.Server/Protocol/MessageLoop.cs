@@ -141,6 +141,10 @@ internal sealed class MessageLoop
             {
                 response = CreateErrorResponse(ErrorNotSupported, ErrorIdUnsupportedCommand, ex.Message);
             }
+            catch (ErrorResponseException ex)
+            {
+                response = ex.ErrorResponse;
+            }
             catch (Exception ex)
             {
                 response = CreateErrorResponse(ErrorInternalError, ErrorIdUnhandledAdapterError, $"Unhandled adapter error: {ex.Message}");
