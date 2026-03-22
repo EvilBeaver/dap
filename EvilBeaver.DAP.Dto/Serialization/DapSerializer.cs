@@ -17,6 +17,15 @@ namespace EvilBeaver.DAP.Dto.Serialization;
 public static class DapSerializer
 {
 #if NETSTANDARD2_0
+    /// <summary>
+    /// Settings for deserializing adapter-specific extension fragments (without <see cref="DapMessageConverter"/>).
+    /// </summary>
+    internal static readonly JsonSerializerSettings ExtensionDeserializeSettings = new()
+    {
+        ContractResolver = new CamelCasePropertyNamesContractResolver(),
+        NullValueHandling = NullValueHandling.Ignore
+    };
+
     private static readonly JsonSerializerSettings Settings = new()
     {
         ContractResolver = new CamelCasePropertyNamesContractResolver(),
@@ -40,6 +49,15 @@ public static class DapSerializer
         return Deserialize(json);
     }
 #else
+    /// <summary>
+    /// Options for deserializing adapter-specific extension fragments (without <see cref="DapMessageConverter"/>).
+    /// </summary>
+    internal static readonly JsonSerializerOptions ExtensionDeserializeOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+    };
+
     private static readonly JsonSerializerOptions Options = new()
     {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
