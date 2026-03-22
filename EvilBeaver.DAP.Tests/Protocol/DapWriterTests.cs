@@ -73,7 +73,7 @@ public class DapWriterTests
 
         // Assert
         var output = Encoding.UTF8.GetString(stream.ToArray());
-        var parts = output.Split("Content-Length: ", StringSplitOptions.RemoveEmptyEntries);
+        var parts = output.Split(new[] { "Content-Length: " }, StringSplitOptions.RemoveEmptyEntries);
         Assert.Equal(2, parts.Length);
         Assert.Contains("\"event\":\"initialized\"", parts[0]);
         Assert.Contains("\"event\":\"stopped\"", parts[1]);

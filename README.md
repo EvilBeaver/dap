@@ -36,6 +36,18 @@ await server.RunAsync(CancellationToken.None);
 
 - .NET 8
 
+## Тесты
+
+Проект `EvilBeaver.DAP.Tests` собирается под `net8.0` и `net481`: второй вариант запускается на **.NET Framework 4.8.1** и подключает **netstandard2.0**-сборки `Dto` и `Server`, чтобы прогонять код за `#if NETSTANDARD2_0`.
+
+```bash
+dotnet test                    # оба таргета
+dotnet test -f net8.0         # только .NET 8
+dotnet test -f net481         # только ветка netstandard2.0 (Windows + .NET Framework 4.8.1)
+```
+
+Для сборки `net481` нужен [developer pack / targeting pack .NET Framework 4.8.1](https://dotnet.microsoft.com/download/dotnet-framework/net481) (часто уже стоит вместе с Visual Studio). На Linux/macOS этот таргет обычно не собирается — там достаточно `dotnet test -f net8.0` или полный прогон в CI на Windows.
+
 ---
 
 <a name="english"></a>
@@ -74,3 +86,15 @@ Implementing the adapter boils down to filling the `IDebugAdapter` methods with 
 ## Requirements
 
 - .NET 8
+
+## Tests
+
+`EvilBeaver.DAP.Tests` multi-targets `net8.0` and `net481`. The `net481` run executes on **.NET Framework 4.8.1** and references the **netstandard2.0** builds of `Dto` and `Server`, exercising `#if NETSTANDARD2_0` code paths.
+
+```bash
+dotnet test                    # both targets
+dotnet test -f net8.0          # .NET 8 only
+dotnet test -f net481          # netstandard2.0 path (Windows + .NET Framework 4.8.1)
+```
+
+Building `net481` requires the [.NET Framework 4.8.1 developer / targeting pack](https://dotnet.microsoft.com/download/dotnet-framework/net481) (often installed with Visual Studio). Linux/macOS builds typically skip or omit this TFM; use `dotnet test -f net8.0` locally or a Windows CI job for the full matrix.

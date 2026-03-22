@@ -6,7 +6,11 @@ using EvilBeaver.DAP.Dto.Base;
 using EvilBeaver.DAP.Dto.Events;
 using EvilBeaver.DAP.Dto.Requests;
 using EvilBeaver.DAP.Dto.Serialization;
+#if NET8_0
 using System.Text.Json;
+#else
+using Newtonsoft.Json.Linq;
+#endif
 using Xunit;
 
 namespace EvilBeaver.DAP.Tests.Serialization;
@@ -133,8 +137,13 @@ public class DapSerializerTests
         Assert.Equal(2, launch.Arguments.AdditionalData.Count);
         Assert.True(launch.Arguments.AdditionalData.ContainsKey("program"));
         Assert.True(launch.Arguments.AdditionalData.ContainsKey("customFlag"));
+#if NET8_0
         Assert.Equal("/app/bin", launch.Arguments.AdditionalData["program"].GetString());
         Assert.Equal(42, launch.Arguments.AdditionalData["customFlag"].GetInt32());
+#else
+        Assert.Equal("/app/bin", launch.Arguments.AdditionalData["program"]!.Value<string>());
+        Assert.Equal(42, launch.Arguments.AdditionalData["customFlag"]!.Value<int>());
+#endif
     }
 
     [Fact]
@@ -148,8 +157,13 @@ public class DapSerializerTests
         var attach = Assert.IsType<AttachRequest>(message);
         Assert.NotNull(attach.Arguments.AdditionalData);
         Assert.Equal(2, attach.Arguments.AdditionalData.Count);
+#if NET8_0
         Assert.Equal(7, attach.Arguments.AdditionalData["processId"].GetInt32());
         Assert.Equal("dbg", attach.Arguments.AdditionalData["pipeName"].GetString());
+#else
+        Assert.Equal(7, attach.Arguments.AdditionalData["processId"]!.Value<int>());
+        Assert.Equal("dbg", attach.Arguments.AdditionalData["pipeName"]!.Value<string>());
+#endif
     }
 
     private sealed class SampleLaunchExtras
